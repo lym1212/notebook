@@ -4,6 +4,8 @@
 - 一个数据库可以有多个集合（表）
 - 一个集合可以有多个文档（表记录）
 - 文档结构灵活
+- 不用设计数据表
+- 业务改动不用关心数据表结构
 
 ```shell
 // 启动
@@ -54,7 +56,7 @@ npm install mongoose
 
 ```javascript
 const mongoose = require('mongoose');
-// 连接数据库 不存在则在插入第一条数据后创建
+// 连接数据库，数据库不存在则在插入第一条数据后自动创建
 mongoose.connect('mongodb://localhost/test');
 
 const Cat = mongoose.model('Cat', { name: String });
@@ -66,7 +68,8 @@ kitty.save().then(() => console.log('meow'));
 #### 设计文档结构
 
 ```javascript
-var userSchema = new mongoose.Schema({
+const Schema = mongoose.Schema
+const userSchema = new Schema({
 	username: {
 	  type: String,
       required: true

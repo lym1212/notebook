@@ -24,7 +24,37 @@ app.listen(3000, () => {
 res.redirect('/')
 ```
 
+## 创建路由
+
+```javascript
+// router.js
+const router = express.Router()
+
+router.get('/', (req, res) => {    
+})
+router.post('/xxx', (req, res) => {    
+})
+// 导出
+module.exports = router
+
+// app.js 挂载
+const router = require('./router.js')
+app.use(router)
+```
+
+## 发送JSON响应
+
+- 把对象转为字符串
+
+```javascript
+res.json(null)
+res.json({ user: 'tobi' })
+res.status(500).json({ error: 'message' })
+```
+
 ##  模板引擎
+
+#### art-template
 
 ```shell
 npm install --save art-template
@@ -37,32 +67,44 @@ npm install --save express-art-template
   app.engine('html', require('express-art-template'));
   ```
 
+## 中间件
 
-## 解析post数据
+#### body-parser: 解析post数据
 
 ```shell
 npm install body-parser --save 
 ```
 
-- 配置：
+- 引入
 
   ```javascript
+  const bodyParser = require('body-parser')
+  ```
+
+- 配置
+
+  ```javascript
+  // 路由挂载之前配置
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(bodyParser.json())
   ```
 
 - 获取数据：`req.body`
 
-## 创建路由
+#### express-session
 
-```javascript
-const router = express.Router()
-
-router.get('/', (req, res) => {
-    
-})
-router.post('/xxx', (req, res) => {
-    
-})
+```shell
+npm install express-session
 ```
 
+- 配置
+
+  ```javascript
+  app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true
+  }))
+  ```
+
+  

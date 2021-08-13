@@ -6,7 +6,7 @@ var http = require('http')
 
 ## 创建服务器
 
-``` 
+``` javascript
 var server = http.createServer()    // 返回 http.server 实例
 ```
 

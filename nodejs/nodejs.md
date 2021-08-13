@@ -36,7 +36,10 @@ npm install nodemon -g
 nodemon app.js
 ```
 
+## node中的其他成员
 
+- `__dirname`：当前模块的目录名
+- `__filename`：当前模块的绝对路径（包括文件名）
 
 
 

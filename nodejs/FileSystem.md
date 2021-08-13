@@ -10,7 +10,7 @@ const fs = require('fs')
 fs.readFile(path, callback)   // 异步
 ```
 
-- path： 文件路径
+- path： 文件路径（如果是相对路径，是相对于执行node命令时的路径）
 
 - 回调函数参数： 
   - error
