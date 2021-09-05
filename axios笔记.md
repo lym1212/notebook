@@ -48,4 +48,18 @@ const { data: res } = await axios.get(url, { params: { id: 77 } })
 ```javascript
 const { data: res } = await axios.post(url, { name: 'mjq' })
 ```
+## axios 挂载到 Vue 原型上
+
+> 缺点：不能实现接口复用
+
+```javascript
+import axios from 'axios'
+
+// 配置根路径
+axios.default.baseURL = ''
+// 挂载到原型上
+Vue.prototype.$http = axios
+// 使用
+this.$http.get()
+```
 

@@ -231,6 +231,10 @@ Vue.component('xxx', xxx)
 
 - 子组件通过 `this.$emit()` 触发自定义事件，父组件监听自定义事件接收数据
 
+  > 当父组件传给子组件的 xxx prop，子组件要改变这个值时，子组件要通过发送 'update:xxx' 来更新，父组件再监听 update:xxx 获取更新
+  >
+  > 这个方法的简写是：:xxx.sync="xxxxx"（模拟双向绑定
+  
   ```vue
   // 子组件 Son.vue
   this.$emit('eventname', this.sdata)

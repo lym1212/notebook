@@ -10,7 +10,7 @@
 npm init -y
 ```
 
-## webpck.config.js 配置
+## webpack.config.js 配置
 
 ```javascript
 const path = require('path')
