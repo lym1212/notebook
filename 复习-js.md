@@ -151,7 +151,7 @@ function Fubar(foo, bar) {
 
 - `Object.prototype`处于原型链的最顶端，对各种实例都返回`true`，除了直接继承自`null`的对象（`Object.create(null)`
 
-# Promise
+# Promise（*
 
 - ES6 提供的一种异步操作解决方案
 
@@ -174,7 +174,7 @@ function Fubar(foo, bar) {
 - 节流：连续触发事件时，n 秒内只执行一次函数，减少函数的执行频率
   - 鼠标点击事件，页面滚动事件
 
-# 数组常用方法
+# 数组常用方法（*
 
 ### 改变原数组的方法
 
@@ -263,7 +263,7 @@ function Fubar(foo, bar) {
 
 5. includes()
 
-# 原型和原型链
+# 原型和原型链（*
 
 - 所有对象都有自己的原型对象（prototype，任何一个对象都可以是其他对象的原型，原型对象也有自己的原型，就会形成一个原型链
 
@@ -295,10 +295,47 @@ function Fubar(foo, bar) {
   // 函数内部的 this 指向添加该事件的对象
   ```
 
-# Event对象
+# Event对象（*
 
+### 概念
+
+- 事件发生后，会产生一个事件对象传给监听函数，所有的对象都继承了`Event.prototype`实例
+- `Event`对象本身也是一个构造函数，可以生成新的实例
+
+### 实例属性
+
+- `Event.bubbles`：返回一个布尔值，表示当前事件是否会冒泡（只读
+
+  > `Event`构造函数生成的事件，默认是不冒泡的，除非显示指定bubbles为true
+
+- `Event.eventPhase`：返回一个整数，表示事件当前所处的阶段（只读
+
+  > 0，事件还没有发生
+  >
+  > 1，捕获阶段，祖先节点到目标节点
+  >
+  > 2，到达目标节点（触发事件的元素
+  >
+  > 3，冒泡阶段，目标节点到祖先的反向传播
+
+- `Event.cancelable`：返回一个布尔值，表示事件是否可以取消（只读
+
+  > `Event`构造函数生成的事件，默认是不可以取消的，除非显示指定cancelable为true
+
+- `Event.cancelBubble`：返回一个布尔值，相当于执行`Event.stopPropagation()`，阻止事件传播
 - `Event.target`：触发事件的元素
 - `Event.currentTarget`：当前执行的监听函数所在元素（会改变
+- `Event.type`：表示事件类型，生成时指定（只读
+- `Event.timeStamp`：返回一个毫秒时间戳，表示事件发生的时间，网页加载成功时开始计算
+- `Event.isTrusted`：返回一个布尔值，表示该事件是否由真实的用户行为产生（点击事件
+- `Event.detail`
+
+### 实例方法
+
+- `Event.preventDefault()`：取消浏览器对当前事件的默认行为（cancelable为true调用才有效
+- `Event.stopPropagation()`：阻止事件在 DOM 中继续传播（冒泡，防止触发定义在别的节点上的监听函数，不包括当前节点的其他监听函数
+- `Event.stopImmediatePropagation()`：阻止同一个事件的其他监听函数被调用，不管监听函数定义在当前节点还是其他节点（比上面的方法阻止的更彻底
+- `Event.composedPath()`：返回一个数组，成员是事件的最底层节点冒泡到最上层的所有节点
 
 # 深拷贝和浅拷贝
 
@@ -307,3 +344,141 @@ function Fubar(foo, bar) {
 
 # DOM操作
 
+- 创建节点
+
+  ```javascript
+  // DocumentFragment 节点代表一个文档的片段，本身就是一个完整的 DOM 树形结构，没有父节点
+  // 用于构建一个 DOM 结构，然后插入当前文档，但是它本身不能被插入当前文档，是它的所有子节点插入当前文档
+  // 一旦 DocumentFragment 节点被添加进当前文档，它自身就变成了空节点，可以被再次使用
+  // 使用 cloneNode 可以不被清空
+  document.querySelector('ul').appendChild(docFrag.cloneNode(true));
+  
+  // 创建 DocumentFragment 节点
+  var docFrag = document.createDocumentFragment()
+  // 等同于
+  var docFrag = new DocumentFragment()
+  
+  // 创建元素节点并返回，参数为标签名（大小写不敏感，可以是自定义的标签名
+  var newDiv = document.createElement('div')
+  
+  // 创建文本节点并返回，参数是文本内容
+  createTextNode()
+  ```
+
+- 添加、移除、替换、插入
+
+  ```javascript
+  // 参数为节点对象，插入到当前节点最后并返回这个子节点
+  // 如果参数是已经存在的节点，会移动到新位置
+  appendChild()
+  
+  // 参数为要移除的子节点并返回，在父节点上调用
+  // 被移除的节点还存在内存中，仍然可以使用，只是不再是dom的一部分
+  var divA = document.getElementById('A')
+  divA.parentNode.removeChild(divA)
+  
+  // 将一个新的节点，替换当前节点的某一个子节点
+  // 参数一是新节点，参数二是要被替换的子节点
+  replaceChild()
+  
+  // 将某个节点插入到指定位置并返回
+  // 参数一是要插入的节点，第二个参数是要插入的位置（子节点的前面
+  // 参数二为null，将插到最后
+  // 参数一为已存在的节点会移动到新位置
+  insertBefore()
+  ```
+
+- 查找
+
+  ```javascript
+  // 参数是id属性，返回指定id属性的元素节点，没有返回null，大小写敏感
+  // 只能在document对象使用
+  document.getElementById()
+  
+  // 选择拥有name属性的 HTML 元素，返回一个类数组（NodeList 实例
+  getElementsByName()
+  
+  // 搜索 HTML 标签名，返回值是一个类数组（HTMLCollection 实例
+  document.getElementsByTagName('*')  // 返回所有html元素
+  
+  // 返回具有指定class的元素节点，大小写敏感，返回值同上（动态集合，改变后会立刻反应到实例
+  getElementsByClassName()
+  
+  // 参数为css选择器，多个选择器用逗号隔开，返回第一个匹配的元素，没有返回null
+  // 不能选择伪元素
+  querySelector('div, p')
+  // 返回所有匹配的元素，NodeList 实例，不是动态集合
+  // 如果选择器里面有伪元素的选择器，返回一个空的实例
+  querySelectorAll()
+  ```
+
+# Ajax 优缺点（*
+
+# 立即执行函数(IIFE)
+
+- JavaScript 规定，如果`function`关键字出现在行首，一律解释成语句
+
+  ```javascript
+  (function(){ /* code */ }());
+  // 或者
+  (function(){ /* code */ })();
+  ```
+
+- 对匿名函数使用：
+
+  - 不用命名，避免污染全局变量和js库冲突
+  - 形成单独的作用域，可以封装外部不能读取的私有变量，避免闭包造成引用变量无发释放
+
+# 多页面之间的通信（*
+
+### cookie
+
+### web worker
+
+### window.sessionStorage & window.localStorage
+
+# CSS和JS动画差异
+
+- 代码复杂度：js更复杂
+- 动画控制：js可以暂停、取消、终止，css不能添加事件
+- 性能：js要解析
+
+# 同源策略
+
+- 协议相同，域名相同，端口相同（浏览器不遵守，不同端口可以互相读取cookie
+
+- 非同源的限制：
+  - 无法读取非同源网页的 Cookie、LocalStorage 和 IndexedDB
+  - 无法接触非同源网页的 DOM
+  - 无法向非同源地址发送 AJAX 请求（可以发送，但浏览器会拒绝接受响应
+
+#  跨域资源共享(CORS)*
+
+# JS数据类型
+
+- 原始数据类型：Number、String、Boolean、undefine、null、Symbol（ES6增加、BigInt（ES10
+
+  > 占据空间小、大小固定，频繁使用
+
+- 引用类型：Object（包括数组、函数、各种对象
+
+  > 占据空间大、大小不固定，存储的是指向地址的指针
+
+# 数据类型转换*
+
+### 强制转换
+
+- `Number()`：将任意类型的值转换为数值
+- `String()`：将任意类型的值转换为字符串
+- `Boolean()`：将任意类型的值转换为布尔值
+
+### 自动转换
+
+- 
+
+# 布尔运算符
+
+- &&：逻辑与，短路运算
+- ||：逻辑或，短路运算
+- !：取反运算
+- `?:`：三元运算符
