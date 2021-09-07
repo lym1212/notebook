@@ -53,6 +53,7 @@
 ```html
 <!-- 声明式导航 -->
 <router-link to="/home"></router-link>
+<!-- active-class: 设置链接激活时使用的 CSS 类 -->
 ```
 
 # `<router-view>`
@@ -106,6 +107,8 @@ props: ['id']
 # 编程式导航
 
 >  js 中调用 `location.href`
+>
+>  声明式：<router-link :to="...">
 
 ```javascript
 // 增加一条历史记录
@@ -122,7 +125,7 @@ this.$router.forward()
 
 > `this.$router` 就是 router 实例
 
-# 导航守卫
+# 导航守卫*
 
 - 通过跳转或取消的方式守卫导航
 
@@ -149,6 +152,9 @@ router.beforeEach((to, from, next) => {
   next(false)
   ```
 
+#### 全局后置钩子
+
+- `router.AfterEach((to, from) => { ... })`
 
 # $route
 
@@ -166,3 +172,15 @@ router.beforeEach((to, from, next) => {
 - `$route.hash`：当前路由的 hash 值（带 #
 - `$route.matched`（Array：当前路由所有嵌套路径片段的路由记录（routes 数组中的对象副本
 - `$route.redirectedForm`：重定向来源的路由的名字
+
+# 路由懒加载
+
+```javascript
+const Foo = () => import('./Foo.vue')
+// import() 函数返回一个Promise对象
+// 使用Babel要安装插件才能解析：syntax-dynamic-import
+
+// 分块
+const Foo = () => import(/* webpackChunkName: "group-foo" */ './Foo.vue')
+```
+

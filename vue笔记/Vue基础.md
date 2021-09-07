@@ -12,7 +12,7 @@
 
 - Model：页面渲染时依赖的数据
 - View：页面渲染的 DOM 结构
-- ViewModel：vue 的实例，MVVM 核心，把 Model 和 View 连接在一起
+- ViewModel：vue 的实例，MVVM 核心，把 Model 和 View 连接在一起，双向数据绑定
 
 # Vue 实例
 
@@ -59,17 +59,20 @@ new Vue({
   > $event 可以获取事件对象：`add($event, 1)`
 
 - 事件修饰符：
-  - `@click.prevent`：作用等于原生 js 的 `e.preventDefault()`
-  - `@click.stop`：作用等于原生 js 的 `e.stopPropagation()`
-  - `@click.native`
-
+  - `.prevent`：作用等于原生 js 的 `e.preventDefault()`
+  - `.stop`：作用等于原生 js 的 `e.stopPropagation()`
+  - `.native`：监听原生事件
+  - `.once`：只触发一次
+  - `.self`：只触发自身的事件
+  - `.capture`：捕获模式
+  
 - 按键修饰符：
   - `@keyup.enter`：只监听回车键
   - `@keyup.esc`：只监听退出键
 
 #### 4. 双向绑定
 
-- `<input type="text" v-model="name">`：本质是 v-bind 和 @input
+- `<input type="text" v-model="name">`：本质是 v-bind 和 @input，语法糖
 
   ```javascript
   <input :value="msg" @input="msg = $event.target.value">
@@ -98,6 +101,10 @@ new Vue({
 
 > key 只能是数值或者字符串且要具有唯一性，index 没有唯一性
 
+# class和style绑定*
+
+
+
 # 过滤器 (Vue3删除)
 
 - 可以用在 Mustache 语法和 v-bind 表达式中，用管道符( | )调用
@@ -117,7 +124,7 @@ new Vue({
 
 # 侦听器
 
-- 监听数据的变化并响应操作
+- 监听数据的变化并响应操作，可以执行异步操作
 
   ```javascript
   data() {
@@ -144,7 +151,7 @@ new Vue({
           // 深度侦听，可以侦听对象中所有属性的变化
           deep: true
       },
-      // 侦听对象属性
+      // 侦听对象的属性
       'info.username'(newVal, oldVal) {}
   }
 
@@ -323,6 +330,10 @@ Vue.component('xxx', xxx)
   ```vue
   this.$ref.son.method()
   ```
+
+# 异步组件
+
+大型项目中，需要将项目分割成小一些的代码块，在需要的时候才从服务器加载
 
 # 插槽
 

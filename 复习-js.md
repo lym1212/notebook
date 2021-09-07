@@ -151,10 +151,6 @@ function Fubar(foo, bar) {
 
 - `Object.prototype`处于原型链的最顶端，对各种实例都返回`true`，除了直接继承自`null`的对象（`Object.create(null)`
 
-# Promise（*
-
-- ES6 提供的一种异步操作解决方案
-
 # 宏任务和微任务
 
 - 宏任务：script代码，setTimeout，setInternal，I/O，setImmediate，requestAnimationFrame（UI render
